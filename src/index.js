@@ -1,0 +1,1 @@
+import b from './svgc/basic2path.js'
