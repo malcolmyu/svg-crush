@@ -11,10 +11,16 @@ function circleProxy(cx, cy, r) {
   var points = [];
 
   points.push({
+    t: 'M',
+    x: cx -r,
+    y: cy
+  });
+
+  points.push({
     t: 'A',
     rx: r,
     ry: r,
-    rax: 0,
+    xar: 0,
     dx: cx + r,
     dy: cy
   });
@@ -23,7 +29,7 @@ function circleProxy(cx, cy, r) {
     t: 'A',
     rx: r,
     ry: r,
-    rax: 0,
+    xar: 0,
     dx: cx - r,
     dy: cy
   });
@@ -31,10 +37,9 @@ function circleProxy(cx, cy, r) {
   return points;
 }
 
-exports.circle = function(circles, context) {
+module.exports = function(circles, context) {
   var len = circles.length, points;
-  var cx, cy, r;
-  var path, node;
+  var cx, cy, r, node;
 
   for (var n = 0; n < len; n++) {
     node = circles.item(n);
@@ -43,8 +48,6 @@ exports.circle = function(circles, context) {
     r = +node.getAttribute('r');
 
     points = circleProxy(cx, cy, r);
-    path = context.createElementNS(c.namespace, 'path');
-    path.setAttribute('d', c.convertPointsToPath(points));
-    node.parentNode.insertBefore(path, node);
+    c.convertNodeToPath(points, node, context);
   }
 };

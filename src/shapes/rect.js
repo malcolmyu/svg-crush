@@ -42,10 +42,9 @@ function rectProxy(x, y, w, h, deg) {
   return points;
 }
 
-exports.rect = function(rects, context) {
+module.exports = function(rects, context) {
   var len = rects.length, points;
-  var x, y, w, h, deg = 0;
-  var path, node;
+  var x, y, w, h, deg = 0, node;
 
   for (var n = 0; n < len; n++) {
     node = rects.item(n);
@@ -55,8 +54,6 @@ exports.rect = function(rects, context) {
     h = +node.getAttribute('height');
 
     points = rectProxy(x, y, w, h, deg);
-    path = context.createElementNS(c.namespace, 'path');
-    path.setAttribute('d', c.convertPointsToPath(points));
-    node.parentNode.insertBefore(path, node);
+    c.convertNodeToPath(points, node, context);
   }
 };

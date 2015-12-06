@@ -16,7 +16,7 @@ Doc.prototype._parse = function() {
   var basicShapes = this.basicShapes;
 
   return Q
-    .nfcall(fs.readFile, source, 'utf8')
+    .nfcall(fs.readFile, this.source, 'utf8')
     .then(function(data) {
       var doc = new Parser().parseFromString(data, 'text/xml');
       var svg = doc.getElementsByTagName('svg')[0];
@@ -52,11 +52,11 @@ Doc.prototype.getPathQ = function() {
     });
 };
 
-Doc.prototype.crush = function() {
+Doc.prototype.crush = function(dest) {
   return this.docQ
     .then(function(doc) {
       var xml = new Serializer().serializeToString(doc);
-      return Q.nfcall(fs.writeFile, xml, 'utf8');
+      return Q.nfcall(fs.writeFile, dest, xml, 'utf8');
     });
 };
 
