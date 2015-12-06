@@ -1,13 +1,17 @@
-function polyProxy(points) {
-  return points.split(',').map(function(point, i) {
-    var reg = /^\s*(\d+)\s*(\d+)\s*$/;
-    var p = point.match(reg) || [0, 0, 0];
+var c = require('./common');
 
-    return {
-      t: i == 0 ? 'M' : 'L',
-      x: p[1], y: p[2]
-    };
-  });
+function polyProxy(p) {
+  p = p.split(/\s|,/);
+  var len = p.length, points = [];
+
+  for (var n = 0; n < len; n += 2) {
+    points.push({
+      t: n == 0 ? 'M' : 'L',
+      x: +p[n], y: +p[n + 1]
+    });
+  }
+
+  return points;
 }
 
 function poly(unclose) {
