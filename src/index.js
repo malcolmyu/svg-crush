@@ -1,1 +1,63 @@
-require('./svgc/basic2path.js');
+var xml = require('xmldom');
+var fs = require('fs');
+var Q = require('q');
+var Parser = xml.DOMParser;
+var Serializer = xml.XMLSerializer;
+var shapes2path = require('./shapes');
+
+function Doc(source, dest) {
+  this.basicShapes = ['rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon'];
+  this.source = source;
+  this.dest = dest;
+  this.docQ = this._parse(source);
+}
+
+Doc.prototype._parse = function() {
+  var basicShapes = this.basicShapes;
+
+  return Q
+    .nfcall(fs.readFile, source, 'utf8')
+    .then(function(data) {
+      var doc = new Parser().parseFromString(data, 'text/xml');
+      var svg = doc.getElementsByTagName('svg')[0];
+      var shapes = {}, xml;
+
+      basicShapes.forEach(function(shape) {
+        shapes[shape] = svg.getElementsByTagName(shape);
+      });
+
+      Object.keys(shapes).forEach(function(shape) {
+        // TODO: 统一处理transform的情况
+        if (shapes[shape].length) {
+          shapes2path[shape](shapes[shape], doc);
+        }
+      });
+      // TODO: remove comment
+      // TODO: remove group
+      // TODO: remove shapes
+      // TODO: merge path
+      return doc;
+    });
+};
+
+Doc.prototype.getDocQ = function() {
+  return this.docQ;
+};
+
+Doc.prototype.getPathQ = function() {
+  return this.docQ
+    .then(function(doc) {
+      var path = doc.getElementsByTagName('path');
+      return path.item(0).getAttribute('d');
+    });
+};
+
+Doc.prototype.crush = function() {
+  return this.docQ
+    .then(function(doc) {
+      var xml = new Serializer().serializeToString(doc);
+      return Q.nfcall(fs.writeFile, xml, 'utf8');
+    });
+};
+
+module.exports = Doc;
