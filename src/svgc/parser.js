@@ -1,6 +1,6 @@
-import sax from 'sax'
+var Sax = require('sax')
 
-const config = {
+var config = {
   strict: true,
   trim: true,
   normalize: true,
@@ -9,16 +9,17 @@ const config = {
   position: false
 };
 
-const parser = sax.parser(config.strict, config);
+var sax = Sax.parser(config.strict, config);
 
-sax.ondoctype =
-  sax.onopentag =
-    sax.oncdata =
-      sax.onclosetag =
-        sax.ontext =
-          sax.onerror =
-            sax.oncomment = data => console.log(data);
-
-export default function(data) {
+module.exports = function(data) {
+  sax.ondoctype =
+    sax.onopentag =
+      sax.oncdata =
+        sax.onclosetag =
+          sax.ontext =
+            sax.onerror =
+              sax.oncomment = function(data) {
+                console.log(data);
+              };
   sax.write(data).close();
-}
+};

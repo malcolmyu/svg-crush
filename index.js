@@ -1,2 +1,1 @@
-require('babel-polyfill');
-require('./lib');
+require('./src');

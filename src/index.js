@@ -1,1 +1,1 @@
-import b from './svgc/basic2path.js'
+require('./svgc/basic2path.js');
