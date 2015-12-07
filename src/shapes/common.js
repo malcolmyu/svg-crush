@@ -1,4 +1,4 @@
-var namespace = "http://www.w3.org/2000/svg";
+var namespace = 'http://www.w3.org/2000/svg';
 
 var pathMap = {
   M: 'M$x,$y',

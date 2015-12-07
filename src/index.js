@@ -4,6 +4,7 @@ var Q = require('q');
 var Parser = xml.DOMParser;
 var Serializer = xml.XMLSerializer;
 var shapes2path = require('./shapes');
+var crush = require('./crush');
 
 function Doc(source, dest) {
   this.basicShapes = ['rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon'];
@@ -32,10 +33,13 @@ Doc.prototype._parse = function() {
           shapes2path[shape](shapes[shape], doc);
         }
       });
+      // TODO: remove empty node
       // TODO: remove comment
       // TODO: remove group
-      // TODO: remove shapes
       // TODO: merge path
+      // TODO: 处理svg尺寸的情况
+      crush.mergePaths(svg);
+
       return doc;
     });
 };
