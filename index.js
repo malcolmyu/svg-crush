@@ -1,8 +1,8 @@
-var Doc = require('./src');
+var SC = require('./src');
 
-var doc = new Doc('./test/test.svg');
+var sc = new SC('./test/test.svg');
 
-doc.crush('./test/test.min.svg')
+sc.crush('./test/test.min.svg')
   .catch(function(err) {
     console.log(err.stack);
   });

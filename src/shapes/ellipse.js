@@ -4,7 +4,7 @@ function ellipseProxy(cx, cy, rx, ry, deg) {
   var points = [];
   deg = deg * Math.PI / 180;
   var x = cx - rx * Math.cos(deg);
-  var y = cy - rx * Math.sin(deg)
+  var y = cy - rx * Math.sin(deg);
 
   points.push({
     t: 'M',

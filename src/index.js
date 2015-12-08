@@ -6,14 +6,13 @@ var Serializer = xml.XMLSerializer;
 var shapes2path = require('./shapes');
 var crush = require('./crush');
 
-function Doc(source, dest) {
+function SC(source) {
   this.basicShapes = ['rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon'];
   this.source = source;
-  this.dest = dest;
   this.docQ = this._parse(source);
 }
 
-Doc.prototype._parse = function() {
+SC.prototype._parse = function() {
   var basicShapes = this.basicShapes;
 
   return Q
@@ -44,11 +43,11 @@ Doc.prototype._parse = function() {
     });
 };
 
-Doc.prototype.getDocQ = function() {
+SC.prototype.getDocQ = function() {
   return this.docQ;
 };
 
-Doc.prototype.getPathQ = function() {
+SC.prototype.getPathQ = function() {
   return this.docQ
     .then(function(doc) {
       var path = doc.getElementsByTagName('path');
@@ -56,7 +55,7 @@ Doc.prototype.getPathQ = function() {
     });
 };
 
-Doc.prototype.crush = function(dest) {
+SC.prototype.crush = function(dest) {
   return this.docQ
     .then(function(doc) {
       var xml = new Serializer().serializeToString(doc);
@@ -64,4 +63,4 @@ Doc.prototype.crush = function(dest) {
     });
 };
 
-module.exports = Doc;
+module.exports = SC;
